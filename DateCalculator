@@ -1,0 +1,187 @@
+package com.kh.api.silsub1.date.run;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import com.kh.api.silsub1.date.controller.DateCalculator;
+
+public class ShowDate {
+
+	public static void main(String[] args) {
+		DateCalculator totalDay = new DateCalculator();
+		
+		System.out.println((totalDay.isLeapYear(2019)==true)?"윤년":"평년");
+		
+		long total = totalDay.getDays();
+		
+		System.out.println("총 날짜 수  : "+total);
+		
+		/*Calendar gc = new GregorianCalendar();
+		int year = gc.get(Calendar.YEAR);
+		int month =gc.get(Calendar.MONTH)+1;
+		int day = gc.get(Calendar.DATE);
+		System.out.println(year+" "+month+" "+day);*/
+		
+	}
+
+}
+
+
+package com.kh.api.silsub1.date.controller;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+public class DateCalculator {
+	public long getDays() {
+		long sumDays=0L;
+		
+		//올해의 날짜를 구해보자
+		Calendar today = new GregorianCalendar();
+		//1년 1월 1일 부터 구해보자
+		Calendar cal = new GregorianCalendar(1,0,1);
+		
+		//작년까지의 날수를 구해보자
+		for(int y=cal.get(Calendar.YEAR) ; y<today.get(Calendar.YEAR) ; y++){
+			if(isLeapYear(y)) {
+				sumDays+=366;
+			}else {
+				sumDays+=365;
+			}
+		}
+		
+		//올해를 구해보자
+		
+		//일단, 올해의 2월이 윤년인지 평년인지의 여부를 따져보자
+		int feb = isLeapYear(today.get(Calendar.MONTH))?29:28;
+		
+		//월을 따져보자
+		for(int m=cal.get(Calendar.MONTH)+1 ; m<today.get(Calendar.MONTH) ; m++ ) {
+			if(m!=2) {
+				if((m<=7 && m%2!=0)||(m>7 &&m%2==0)) {
+					sumDays+=31;
+				}else {
+					sumDays+=30;
+				}
+			}else {
+				sumDays+=feb;
+			}
+		}
+		
+		//일수를 따져보자
+		sumDays+=today.get(Calendar.DATE);
+		return sumDays;
+		
+		
+	}
+	public boolean isLeapYear(int y) {
+		return (y%4==0 &&  y%100!=0 || y%400==0 ) ; 
+	}
+	/*
+	 * 
+	 * 강사님꺼
+	 * 
+	 * 
+	 * 
+	 * public long getDays() {
+		long sumDays = 0;
+		
+		Calendar today = new GregorianCalendar();
+		Calendar cal = new GregorianCalendar(1, 0, 1);
+		
+		//작년 12월 31일까지 구하는 구문
+		for(int i = cal.get(Calendar.YEAR); i < today.get(Calendar.YEAR); i++) {
+			if(isLeapYear(i)) {
+				sumDays += 366;
+			}else {
+				sumDays += 365;
+			}
+		}
+		
+		//올해 1월 1일부터 날 수 구하는 구문	
+		int feb = isLeapYear(today.get(Calendar.YEAR))?29:28;
+		
+		for(int i = cal.get(Calendar.MONTH) + 1; i <= today.get(Calendar.MONTH); i++) { 
+			if(i == 2) {
+				sumDays += feb;
+			}else if((i % 2 != 0 && i < 8) || (i % 2 == 0 && i > 7)) {
+				sumDays += 31;
+			} else {
+				sumDays += 30;
+			}
+		}
+		
+		sumDays += today.get(Calendar.DATE);
+		
+		return sumDays;
+	}
+	
+	public boolean isLeapYear(int year) {
+		return ((year % 4 == 0) && (year % 100 != 0) || (year % 400 == 0));
+	}*/
+		
+	/*public long getDays() {
+	
+	    long sumDays = 0L;
+		
+		Calendar gc = new GregorianCalendar();
+		 
+		int year = gc.get(Calendar.YEAR);
+		int month =gc.get(Calendar.MONTH)+1;
+		int day = gc.get(Calendar.DATE);
+		int endDay;
+		
+		for(int i = 1; i<=year ; i++) {
+			
+			boolean t = isLeapYear(i);
+			
+			if(i<year) {
+				if(t==true) {
+					sumDays+=366;
+				}
+				else {
+					sumDays+=365;
+				}
+				
+			}
+			else {
+				if(month<=7) {
+					if(month%2!=0) {
+						endDay=31;
+					}else {
+						endDay=30;
+					}
+				}
+				else {
+					if(month%2==0){
+						endDay=31;
+					}else {
+						endDay=30;
+					}
+				}
+				for(int m=0 ; m<month ; m++) {
+					sumDays+=endDay;
+				}
+			}
+		}
+		
+		//if(year%4==0 &&(year%100!=0 || year%400==0)) {
+			//if(month<=2&&day<29) {
+			//}
+		//}
+		
+		return sumDays;
+	}
+		
+	
+	public boolean isLeapYear(int i) {
+		boolean t;
+		if(i%4==0 && (i%100!=0 || i%400==0)) {
+				t=true;
+				return t;
+		}
+		t=false;
+		return t;
+	}*/
+
+}
